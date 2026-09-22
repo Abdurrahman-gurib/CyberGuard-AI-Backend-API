@@ -3,5 +3,9 @@ dist/
 .env
 *.sqlite
 uploads/
+logs
+*.log
 npm-debug.log*
+*.tsbuildinfo
+coverage
 .DS_Store
