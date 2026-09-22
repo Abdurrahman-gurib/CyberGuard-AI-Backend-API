@@ -1,11 +1,11 @@
-# CyberGuard AI — Backend API
+# CyberGuard AI - Backend API
 
 **AI-assisted cybersecurity risk analysis, recommendation and alert platform for enterprises.**
 
 This is the NestJS backend for CyberGuard AI, the dissertation prototype described in
 *"CyberGuard AI: Design and Evaluation of an AI Assisted Cybersecurity Risk Analysis, Recommendation and Alert Platform for Enterprises."*
 It connects organisational context and cybersecurity evidence with transparent risk assessment,
-control prioritisation, implementation actions and deterministic alerts — with OpenAI producing
+control prioritisation, implementation actions and deterministic alerts - with OpenAI producing
 evidence-grounded draft analysis and Anthropic Claude providing a separate critique pass.
 
 Frontend repository: **CyberGuard-AI-Frontend-UI** (React + Vite + TypeScript).
@@ -68,7 +68,7 @@ Key boundary rules (from the dissertation design):
   the backend validates every emitted evidence/control identifier against real records and strips
   anything unknown (`reference_issues` on the run).
 - **Uploaded document text is data, never instructions** (prompt-injection boundary, OWASP LLM01).
-- **API keys live only in server configuration** — never in business tables, never in the browser.
+- **API keys live only in server configuration** - never in business tables, never in the browser.
 - **Urgent alerts are deterministic** and never depend on model availability.
 
 ## Data model (core entities)
@@ -124,7 +124,7 @@ erDiagram
 | 17–25 | Critical |
 
 Additional rules: an **impact of 5 always sets a consequence-review flag** regardless of the
-product (rule R02); approved risk versions are **immutable** — treatment progress creates new
+product (rule R02); approved risk versions are **immutable** - treatment progress creates new
 versions rather than rewriting history; a completed action **never** changes an approved score
 without a new approved reassessment.
 
@@ -149,7 +149,7 @@ sequenceDiagram
     C-->>API: Claim-by-claim critique + revised draft + change log
     API->>API: Record run (refusals/timeouts stored as failed runs)
     API-->>U: ai_run (anthropic, linked to parent draft)
-    Note over U: Human approval is always required —<br/>a model response never becomes an approved assessment.
+    Note over U: Human approval is always required -<br/>a model response never becomes an approved assessment.
 ```
 
 ## Alert engine
@@ -164,10 +164,10 @@ flowchart LR
     R2 -- yes --> D
     R3 -- yes --> D
     R4 -- yes --> D
-    D --> A[Create alert rows] --> ACK[open → acknowledged → resolved]
+    D --> A[Create alert rows] --> ACK[open / acknowledged / resolved]
 ```
 
-Acknowledgement records that someone saw the condition — it never implies the risk was treated.
+Acknowledgement records that someone saw the condition - it never implies the risk was treated.
 
 ## Action lifecycle
 
@@ -198,7 +198,7 @@ All routes are prefixed with `/api`. Everything except `/auth/*` and `/health` r
 | `POST /assessments/:id/evidence` | Upload evidence (PDF/DOCX/CSV/TXT, ≤10 MB, hashed + extracted) |
 | `GET /assessments/:id/evidence`, `POST /evidence/:id/status` | Evidence review states |
 | `GET/POST /assessments/:id/risks` | Risks |
-| `POST /risks/:id/versions` | New rating version — score/band computed server-side |
+| `POST /risks/:id/versions` | New rating version - score/band computed server-side |
 | `POST /risk-versions/:id/approve` | Approve (immutable afterwards) |
 | `GET /organisations/:id/risk-register` | Flattened register with latest versions |
 | `POST /risk-versions/:id/recommendations` | Attach a catalogue control to an approved version |
@@ -245,7 +245,7 @@ npm run build
 npm start                   # or: npm run start:dev
 ```
 
-With `DATABASE_URL` left empty the app uses a local SQLite file (`cyberguard.sqlite`) —
+With `DATABASE_URL` left empty the app uses a local SQLite file (`cyberguard.sqlite`) -
 no database server needed for development. Set a PostgreSQL `DATABASE_URL` for production.
 
 ### Environment variables
@@ -279,5 +279,5 @@ A ready-made blueprint is included in [`render.yaml`](render.yaml).
 - Evidence uploads are size-limited, extension-checked and hashed (SHA-256); extraction failures
   are surfaced as review conditions, never presented as complete assessments.
 - Model outputs are validated: unknown evidence or control identifiers are stripped and logged.
-- This is a research prototype built for evaluation with fictional organisations — see the
+- This is a research prototype built for evaluation with fictional organisations - see the
   dissertation's Chapter 6 for the evaluation protocol and Chapter 7 for limitations.
